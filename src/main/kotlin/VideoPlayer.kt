@@ -37,10 +37,29 @@ class VideoPlayer(props: VideoPlayerProps) : RComponent<VideoPlayerProps, RState
                     +"Mark as unwatched"
                 }
             }
-            img {
-                attrs {
-                    src = "https://via.placeholder.com/640x360.png?text=Video+Player+Placeholder"
+            styledDiv {
+                css {
+                    display = Display.flex
+                    marginBottom = 10.px
                 }
+                emailShareButton {
+                    attrs.url = props.video.videoUrl
+                    emailIcon {
+                        attrs.size = 32
+                        attrs.round = true
+                    }
+                }
+
+                telegramShareButton {
+                    attrs.url = props.video.videoUrl
+                    telegramIcon {
+                        attrs.size = 32
+                        attrs.round = true
+                    }
+                }
+            }
+            reactPlayer {
+                attrs.url = props.video.videoUrl
             }
         }
     }
