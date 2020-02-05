@@ -4,8 +4,12 @@ import react.dom.*
 import styled.css
 import styled.styledDiv
 
+external interface AppState: RState {
+    var currentVideo: Video?
+}
+
 @JsExport
-class App : RComponent<RProps, RState>() {
+class App : RComponent<RProps, AppState>() {
     override fun RBuilder.render() {
         h1 {
             +"KotlinConf Explorer"
@@ -16,6 +20,12 @@ class App : RComponent<RProps, RState>() {
             }
             videoList {
                 videos = unwatchedVideos
+                selectedVideo = state.currentVideo
+                onSelectVideo = { video ->
+                    setState {
+                        currentVideo = video
+                    }
+                }
             }
 
             h3 {
@@ -23,6 +33,12 @@ class App : RComponent<RProps, RState>() {
             }
             videoList {
                 videos = watchedVideos
+                selectedVideo = state.currentVideo
+                onSelectVideo = { video ->
+                    setState {
+                        currentVideo = video
+                    }
+                }
             }
         }
         styledDiv {
