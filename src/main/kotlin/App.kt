@@ -4,12 +4,25 @@ import react.dom.*
 import styled.css
 import styled.styledDiv
 
-external interface AppState: RState {
+external interface AppState : RState {
     var currentVideo: Video?
+    var unwatchedVideos: List<Video>
+    var watchedVideos: List<Video>
 }
 
 @JsExport
 class App : RComponent<RProps, AppState>() {
+    override fun AppState.init() {
+        unwatchedVideos = listOf(
+            KotlinVideo(1, "Building and breaking things", "John Doe", "https://youtu.be/PsaFVLr8t4E"),
+            KotlinVideo(2, "The development process", "Jane Smith", "https://youtu.be/PsaFVLr8t4E"),
+            KotlinVideo(3, "The Web 7.0", "Matt Miller", "https://youtu.be/PsaFVLr8t4E")
+        )
+        watchedVideos = listOf(
+            KotlinVideo(4, "Mouseless development", "Tom Jerry", "https://youtu.be/PsaFVLr8t4E")
+        )
+    }
+
     override fun RBuilder.render() {
         h1 {
             +"KotlinConf Explorer"
@@ -19,7 +32,7 @@ class App : RComponent<RProps, AppState>() {
                 +"Videos to watch"
             }
             videoList {
-                videos = unwatchedVideos
+                videos = state.unwatchedVideos
                 selectedVideo = state.currentVideo
                 onSelectVideo = { video ->
                     setState {
@@ -32,7 +45,7 @@ class App : RComponent<RProps, AppState>() {
                 +"Videos watched"
             }
             videoList {
-                videos = watchedVideos
+                videos = state.watchedVideos
                 selectedVideo = state.currentVideo
                 onSelectVideo = { video ->
                     setState {
@@ -41,18 +54,22 @@ class App : RComponent<RProps, AppState>() {
                 }
             }
         }
-        styledDiv {
-            css {
-                position = Position.absolute
-                top = 10.px
-                right = 10.px
-            }
-            h3 {
-                +"John Doe: Building and breaking things"
-            }
-            img {
-                attrs {
-                    src = "https://via.placeholder.com/640x360.png?text=Video+Player+Placeholder"
+        state.currentVideo?.let { currentVideo ->
+            videoPlayer {
+                video = currentVideo
+                unwatchedVideo = currentVideo in state.unwatchedVideos
+                onWatchedButtonPressed = {
+                    if (video in state.unwatchedVideos) {
+                        setState {
+                            unwatchedVideos -= video
+                            watchedVideos += video
+                        }
+                    } else {
+                        setState {
+                            watchedVideos -= video
+                            unwatchedVideos += video
+                        }
+                    }
                 }
             }
         }
