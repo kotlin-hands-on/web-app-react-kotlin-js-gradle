@@ -1,5 +1,5 @@
 import react.dom.*
-import kotlin.browser.document
+import kotlinx.browser.document
 import kotlinx.css.*
 import styled.*
 
