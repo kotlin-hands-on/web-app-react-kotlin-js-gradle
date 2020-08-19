@@ -1,5 +1,5 @@
 import kotlinx.html.js.onClickFunction
-import kotlin.browser.window
+import kotlinx.browser.window
 import react.*
 import react.dom.*
 
