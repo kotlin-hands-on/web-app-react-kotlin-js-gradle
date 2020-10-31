@@ -4,7 +4,7 @@ import react.*
 import react.dom.*
 import styled.css
 import styled.styledDiv
-import kotlin.browser.window
+import kotlinx.browser.window
 import kotlinx.coroutines.*
 
 suspend fun fetchVideo(id: Int): Video =
