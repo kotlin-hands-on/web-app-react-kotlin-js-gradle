@@ -1,6 +1,6 @@
 plugins {
-    kotlin("js") version "1.6.10"
-    kotlin("plugin.serialization") version "1.6.10"
+    kotlin("js") version "1.7.10"
+    kotlin("plugin.serialization") version "1.7.10"
 }
 
 group = "org.example"
@@ -23,26 +23,29 @@ kotlin {
 
 dependencies {
     //React, React DOM + Wrappers (chapter 3)
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.297-kotlin-1.6.10")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.297-kotlin-1.6.10")
-    implementation(npm("react", "17.0.2"))
-    implementation(npm("react-dom", "17.0.2"))
+    implementation(enforcedPlatform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.354"))
+    implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
+    implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
 
-    //Kotlin React CSS (chapter 3)
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-react-css:17.0.2-pre.298-kotlin-1.6.10")
+    //Kotlin React Emotion (CSS) (chapter 3)
+    implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion")
 
     //Video Player (chapter 7)
-    implementation(npm("react-youtube-lite", "1.5.0"))
+    implementation(npm("react-player", "2.10.1"))
 
     //Share Buttons (chapter 7)
     implementation(npm("react-share", "4.4.0"))
 
     //Coroutines & serialization (chapter 8)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 }
 
 // Heroku Deployment (chapter 9)
 tasks.register("stage") {
     dependsOn("build")
+}
+
+rootProject.extensions.configure<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension> {
+    versions.webpackCli.version = "4.10.0"
 }
