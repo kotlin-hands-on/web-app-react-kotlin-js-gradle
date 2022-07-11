@@ -36,8 +36,29 @@ val VideoPlayer = FC<VideoPlayerProps> { props ->
                 +"Mark as unwatched"
             }
         }
-        img {
-            src = "https://via.placeholder.com/640x360.png?text=Video+Player+Placeholder"
+        div {
+            css {
+                display = Display.flex
+                marginBottom = 10.px
+            }
+            EmailShareButton {
+                url = props.video.videoUrl
+                EmailIcon {
+                    size = 32
+                    round = true
+                }
+            }
+            TelegramShareButton {
+                url = props.video.videoUrl
+                TelegramIcon {
+                    size = 32
+                    round = true
+                }
+            }
+        }
+        ReactPlayer {
+            url = props.video.videoUrl
+            controls = true
         }
     }
 }
