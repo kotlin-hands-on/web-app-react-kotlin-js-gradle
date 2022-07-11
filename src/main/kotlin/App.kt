@@ -14,16 +14,36 @@ import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.img
 
+suspend fun fetchVideo(id: Int): Video {
+    val response = window
+        .fetch("https://my-json-server.typicode.com/kotlin-hands-on/kotlinconf-json/videos/$id")
+        .await()
+        .text()
+        .await()
+    return Json.decodeFromString(response)
+}
+
+suspend fun fetchVideos(): List<Video> = coroutineScope {
+    (1..25).map { id ->
+        async {
+            fetchVideo(id)
+        }
+    }.awaitAll()
+}
+
+val mainScope = MainScope()
+
 val App = FC<Props> {
     var currentVideo: Video? by useState(null)
-    var unwatchedVideos: List<Video> by useState(listOf(
-        Video(1, "Opening Keynote", "Andrey Breslav", "https://youtu.be/PsaFVLr8t4E"),
-        Video(2, "Dissecting the stdlib", "Huyen Tue Dao", "https://youtu.be/Fzt_9I733Yg"),
-        Video(3, "Kotlin and Spring Boot", "Nicolas Frankel", "https://youtu.be/pSiZVAeReeg")
-    ))
-    var watchedVideos: List<Video> by useState(listOf(
-        Video(4, "Creating Internal DSLs in Kotlin", "Venkat Subramaniam", "https://youtu.be/JzTeAM8N1-o")
-    ))
+    var unwatchedVideos: List<Video> by useState(emptyList())
+    var watchedVideos: List<Video> by useState(emptyList())
+
+    useEffectOnce {
+        mainScope.launch {
+            unwatchedVideos = fetchVideos()
+        }
+    }
+
     h1 {
         +"Hello, React+Kotlin/JS!"
     }
