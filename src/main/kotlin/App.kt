@@ -15,6 +15,7 @@ import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.img
 
 val App = FC<Props> {
+    var currentVideo: Video? by useState(null)
     h1 {
         +"Hello, React+Kotlin/JS!"
     }
@@ -24,6 +25,10 @@ val App = FC<Props> {
         }
         VideoList {
             videos = unwatchedVideos
+            selectedVideo = currentVideo
+            onSelectVideo = { video ->
+                currentVideo = video
+            }
         }
 
         h3 {
@@ -31,6 +36,10 @@ val App = FC<Props> {
         }
         VideoList {
             videos = watchedVideos
+            selectedVideo = currentVideo
+            onSelectVideo = { video ->
+                currentVideo = video
+            }
         }
     }
     div {
